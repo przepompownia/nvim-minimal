@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+currentDir="$(dirname "$(dirname "$(realpath "${BASH_SOURCE[0]}")")")"
+initFile="${currentDir}/nvim/init.lua"
+exec "${NVIM_FROM_SRC_DIR:-/usr/local}/bin/nvim" \
+    -u "$initFile" \
+    "$@"

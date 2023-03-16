@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+set -e
+
+. "$(realpath "$(dirname "${BASH_SOURCE[0]}")")/actions"
+. "$(realpath "$(dirname "${BASH_SOURCE[0]}")/../bin")/run-post-merge-actions"
+
+exit 0

@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+usage="$0 baseDirectory configFile"
+baseDirectory="${1?$usage}" || exit 1
+baseDirectory="$(realpath "$baseDirectory")"
+configFile="${2?$usage}" || exit 1
+
+while IFS=':' read -r submoduleDir hooksRelativeDir; do
+    submoduleAbsoluteDir="${baseDirectory}/${submoduleDir}"
+    echo "Entering ${submoduleAbsoluteDir}" >&2
+    cd "${submoduleAbsoluteDir}" || { echo "${submoduleAbsoluteDir}" not exists >&2; continue; }
+    git config --local core.hooksPath .githooks
+    [[ -a '.githooks' ]] && continue
+    ln --symbolic --verbose "${hooksRelativeDir}" '.githooks' >&2
+done < "$configFile"

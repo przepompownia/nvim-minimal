@@ -1,0 +1,11 @@
+/.config/backups/
+/.config/nvim/site/
+/.config/vim/.viminfo
+/.config/vim/viminfo
+/.githooks
+/.nvimlog
+/tools
+/.xdg/cache/
+/.xdg/data/
+/.xdg/state/
+/nvim/initPerHost.lua

@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+remote="${1:-origin}"
+branch="${2:-master}"
+
+git show-ref --head -- '^HEAD$' "refs/remotes/${remote}/${branch}" | cut -d' ' -f1 | sort -u | wc -l | xargs -I % test % -eq 1

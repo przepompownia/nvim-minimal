@@ -1,0 +1,21 @@
+[core]
+    hooksPath = .githooks
+[alias]
+	top = rev-parse --show-toplevel
+	list-submodules = submodule foreach --quiet 'echo $toplevel/$sm_path'
+	add-submodules = !"bash -c 'mapfile -t submodules < <(git list-submodules-on-configured-branch); git add --verbose \"${submodules[@]}\"'"
+	list-changed-submodules = !"bash -c 'mapfile -t submodules < <(git list-submodules); git diff --name-only --ignore-submodules=dirty \"${submodules[@]}\"'"
+	list-non-submodules = !bash -c 'git list-submodules | sort | comm -13 - <(ls -1d "$(git top)/nvim/pack/"*/*/*)'
+	ci-submodules = commit -m 'Upgrade extensions'
+	cvs = !git add-submodules && git ci-submodules
+	su = submodule update --init --recursive
+	sur = submodule update --init --recursive --remote
+	list-submodules-on-configured-branch = "!git submodule foreach --quiet 'branch=`git -C \"$toplevel\" config --file \"$toplevel/.gitmodules\" --get submodule.$name.branch || echo master`; \"$toplevel/.config/bin/git-does-head-belong-to\" origin \"$branch\" && echo \"$displaypath\" || printf \"\\t\\e[31m✗ %s has HEAD not on %s/%s (is on %s)\\e[0m\\n\" \"$displaypath\" origin \"$branch\" \"$(git branch --contains HEAD)\" >&2'"
+    list-files-changed-after-merge = "!f(){ git diff-tree -r --name-only --no-commit-id ORIG_HEAD HEAD; }; f"
+    matches-filename-changed-after-merge = "!f(){ test -z \"$1\" && { echo 'Required regex to match files'>&2; return 1; }; git list-files-changed-after-merge | command grep -Eq -- \"$1\"; }; f"
+    list-files-changed-between-commits = "!f(){ git diff-tree -r --name-only --no-commit-id $1 $2; }; f"
+	matches-filename-changed-between-commits = "!f(){ test -z \"$1\" && { echo 'Required regex to match files'>&2; return 1; }; git list-files-changed-between-commits $2 $3 | command grep -Eq -- \"$1\"; }; f"
+[pretty]
+	showInHook = %cd %s
+[log]
+	date = format-local:%Y-%m-%d %H:%M:%S %z

@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+mapfile -t executables <"$(dirname "$(dirname "${BASH_SOURCE[0]}")")/requirements"
+
+for executableLine in "${executables[@]}"; do
+    read -r executable description <<< "${executableLine}"
+    if path="$(command -v "$executable")"; then
+        printf '\t\e[32m✓\e[0m %s: %s\n' "$executable" "$path"
+        continue
+    fi
+
+    printf '\t\e[31m✗\e[0m %s not found. See %s\n' "$executable" "$description"
+done

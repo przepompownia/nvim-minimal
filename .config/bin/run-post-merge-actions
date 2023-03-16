@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+for pattern in "${!patternToAction[@]}" ; do
+    git matches-filename-changed-after-merge "$pattern" && "${patternToAction[$pattern]}"
+done

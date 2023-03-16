@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+currentDir="$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
+"${currentDir}/nvim" --remote-ui --server "${1}"
